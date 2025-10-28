@@ -74,6 +74,7 @@ def dashboard():
        
        st.title("Dataset Overview")
        st.write(df.head(3))
+       st.write("        ")
        st.subheader("Statistical Summary")
        st.write(df.describe())
        st.write("### Categorical Value Counts")

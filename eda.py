@@ -73,7 +73,7 @@ def dashboard():
                                    "Trend Analysis","Correlation Relationship","Key Insights", "Conclusion"])
     if page == "Overview":
        
-       st.title("Dataset Overview")
+       st.subheader("Dataset Overview")
        st.write(df.head(3))
        st.write("        ")
        st.write(" ")

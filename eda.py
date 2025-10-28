@@ -40,7 +40,7 @@ for col in df.columns:
 
 def dashboard():
     st.sidebar.title("🚗 Exploratory Data Analysis ")
-    page = st.sidebar.radio("📂", ["Overview", "Numerical Features Distribution", "Outlier Detection","Categorical Features Analysis"])
+    page = st.sidebar.radio("📂", ["Overview", "Numerical Features Distribution","Categorical Features Analysis", "Outlier Detection"])
     if page == "Overview":
        
        st.subheader("Dataset Overview")

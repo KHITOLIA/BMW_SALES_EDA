@@ -13,7 +13,8 @@ import seaborn as sns
 st.set_page_config(
     page_title="BMW Sales EDA",
     page_icon="🚗",
-    layout="None"
+    initial_sidebar_state = "collapsed",
+    layout="centered"
 )
 # ------------------------------------------------
 # Custom Background and Styling

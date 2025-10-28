@@ -8,7 +8,6 @@ import os
 from sklearn.preprocessing import LabelEncoder
 import kagglehub
 import seaborn as sns
-
 # ------------------------------------------------
 # Streamlit page setup
 # ------------------------------------------------
@@ -155,7 +154,7 @@ def dashboard():
             for col in categorical_features:
                 idx = categorical_features.index(col)
                 plt.figure(figsize=(10, 6))
-                ax = sns.barplot(x = col, y = 'Sales_Volume', data = df,ci = None,  estimator = np.mean, order = df.groupby(col)['Sales_Volume'].sum().sort_values(ascending=False).index, palette='magma')
+                ax = sns.barplot(x = col, y = 'Sales_Volume', data = df,ci = None,  estimator = sum, order = df.groupby(col)['Sales_Volume'].sum().sort_values(ascending=False).index, palette='magma')
                 for cont in ax.containers:
                     ax.bar_label(cont, fmt='%.0f')
                 idx = idx + 1

@@ -40,7 +40,7 @@ for col in df.columns:
 
 def dashboard():
     st.sidebar.title("🚗 Exploratory Data Analysis ")
-    page = st.sidebar.radio("📂", ["Overview", "Numerical Features Distribution","Categorical Features Distribution", "Pie-Chart","Outlier Detection", "Sales Trend Analysis","Price Trend Analysis", "Regional Analysis"])
+    page = st.sidebar.radio("📂", ["Overview", "Outlier Detection", "Numerical Features Distribution","Categorical Features Distribution", "Pie-Chart", "Sales Trend Analysis","Price Trend Analysis", "Regional Analysis"])
     if page == "Overview":
        
        st.title("Dataset Overview")
@@ -74,6 +74,7 @@ def dashboard():
        
     elif page == "Numerical Features Distribution":
         st.title("Distribution of Numerical Features")
+        
         for col in numerical_features:
             plt.figure(figsize=(8, 3))
             sns.histplot(df[col], kde=True, color="blue")
@@ -83,12 +84,15 @@ def dashboard():
             plt.tight_layout()
             plt.show()
             st.pyplot(plt)
-        st.subheader("Insights")
-        st.write('''1. data has been properly in the format no negative values are present here
-                    \n2. All features have a uniform distribution.
-                    \n3. from the above analysis we can say that no need of mileage col no relationship found.
-                    \n4. hence we can drop the mileage column from the data for better analysis
-                    ''')
+        with st.spinner("Generating Insights"):
+            print("Insights")
+            # st.write('''1. data has been properly in the format no negative values are present here
+            #             \n2. All features have a uniform distribution.
+            #             \n3. from the above analysis we can say that no need of mileage col no relationship found.
+            #             \n4. hence we can drop the mileage column from the data for better analysis.
+            #             ''')
+
+
 
     elif page == 'Categorical Features Distribution':
         st.title("Categorical Features Analysis")

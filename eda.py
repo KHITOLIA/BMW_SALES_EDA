@@ -18,7 +18,7 @@ st.set_page_config(
 
 import time
 
-def type_writer(text, speed=0.00001):
+def type_writer(text, speed=0.00009):
     """Display text with typing animation."""
     placeholder = st.empty()
     typed_text = ""

@@ -13,9 +13,20 @@ import seaborn as sns
 st.set_page_config(
     page_title="BMW Sales EDA",
     page_icon="🚗",
-    initial_sidebar_state = "collapsed",
-    layout="centered"
+    layout="wide"
 )
+
+import time
+
+def type_writer(text, speed=0.00001):
+    """Display text with typing animation."""
+    placeholder = st.empty()
+    typed_text = ""
+    for char in text:
+        typed_text += char
+        placeholder.markdown(f"<p style='color:white;font-size:16px;'>{typed_text}</p>", unsafe_allow_html=True)
+        time.sleep(speed)
+
 # ------------------------------------------------
 # Custom Background and Styling
 # ------------------------------------------------
@@ -73,11 +84,8 @@ def dashboard():
                                    "Trend Analysis","Correlation Relationship","Key Insights", "Conclusion"])
     if page == "Overview":
        
-       st.subheader("Dataset Overview")
-       st.write(df.head(3))
-       st.write("        ")
-       st.write(" ")
-       st.write(" ")
+       st.title("Dataset Overview")
+       st.dataframe(data = df)
        st.subheader("Statistical Summary")
        st.write(df.describe())
        st.write("### Categorical Value Counts")
@@ -95,7 +103,8 @@ def dashboard():
         st.write(sorted(df[col].unique()))
         st.write("")
        st.subheader("Insights")
-       st.write(f'''1. Data contains 50000 rows and 11 columns
+       with st.expander("📊 Show "):
+          st.write(f'''1. Data contains 50000 rows and 11 columns
                     \n2. The dataset contains a mix of categorical and numerical features.
                     \n3. Numerical features include {numerical_features[0]}, {numerical_features[1]}, {numerical_features[2]}, {numerical_features[3]}. 
                     \n4. The dataset appears to be well-structured with no missing values in the displayed overview.
@@ -103,6 +112,7 @@ def dashboard():
                     \n6. According to this data bwm sold their cars from 2010-2024.
                     \n7. Their Engine size varies from 1.5L-5.0L.
                     \n8. Price range of cars is from 20,000 USD to 150,000 USD.''')
+       
 #-----------------------------------------------------------------------------------------------------------------------
     elif page == "Outlier Detection":
         st.title("Outlier Detection using Box Plots")
@@ -116,7 +126,8 @@ def dashboard():
             plt.show()
             st.pyplot(plt)
         st.subheader("Insights")
-        st.write('''1. No outliers are present in the numerical features as per the box plot analysis
+        with st.expander("📊 Show "):
+            st.write('''1. No outliers are present in the numerical features as per the box plot analysis
                     \n2. All the columns are in proper type
                     \n3. No need of outlier treatment as no outliers are present in the data
                     \n4. Data is clean and ready for further analysis or modeling
@@ -134,7 +145,8 @@ def dashboard():
             st.pyplot(plt)
         
         st.subheader("Insights")
-        st.write('''1. All categories in each categorical column are fairly represented in the dataset.
+        with st.expander("📊 Show "):
+            st.write('''1. All categories in each categorical column are fairly represented in the dataset.
                     \n2. The distribution of car models, regions, colors, fuel types, and transmissions appears balanced without extreme dominance by any single category.
                     \n3. This balance is beneficial for building robust machine learning models as it reduces bias towards any particular category.
                     ''')
@@ -157,7 +169,8 @@ def dashboard():
                 plt.show()
                 st.pyplot(plt)
             st.subheader("Insights")
-            st.write('''1. all categories in each categorical col are almost equally distributed.
+            with st.expander("📊 Show "):
+                st.write('''1. all categories in each categorical col are almost equally distributed.
                     \n2. Model: The dataset includes a variety of BMW models, with some models being more popular than others where 7 Series have the highest number of records.
                     \n3. Region: Sales are distributed across multiple regions, indicating a global presence.
                     \n4. Asians are the most recorded people out here.
@@ -176,8 +189,9 @@ def dashboard():
                 plt.show()
                 st.pyplot(plt)
             
-            st.write("Insights")
-            st.write('''1. data has been properly in the format no negative values are present here
+            st.subheader("Insights")
+            with st.expander("📊 Show "):
+                st.write('''1. data has been properly in the format no negative values are present here
                         \n2. All features have a uniform distribution.
                         \n3. from the above analysis we can say that no need of mileage col no relationship found.
                         \n4. hence we can drop the mileage column from the data for better analysis.
@@ -203,7 +217,8 @@ def dashboard():
             plt.show()
             st.pyplot(plt)
         st.subheader("Insights")
-        st.write('''1. BMW sold almost same amount of different Models whereas 7 Series generates the highest revenue for the company and M3 lowest.
+        with st.expander("📊 Show "):
+            st.write('''1. BMW sold almost same amount of different Models whereas 7 Series generates the highest revenue for the company and M3 lowest.
                 \n2. It clearly reflecting the behaviour of customers are showing interest not only to specific model but also to every model equally.
                 \n3. Mostly Asians are Beemer Lover 
                 \n4. BMW Sales is approximately same among rest of the regions
@@ -246,7 +261,8 @@ def dashboard():
             plt.show()
             st.pyplot(plt)
             st.subheader("Insights")
-            st.write('''1. Company is being almost consistent making profit from 2010 to 2017.
+            with st.expander("📊 Show "):
+                st.write('''1. Company is being almost consistent making profit from 2010 to 2017.
                         \n2. After 2018 it leads to showing some alternate fluctuations per year till 2024 by increasing lately.
                         \n3. Peak Sales goes in 2022 but slightly decrease in next two years.
                         \n4. Recently X6 Sales increased in few years whereas M3 decreased.
@@ -285,7 +301,8 @@ def dashboard():
             plt.show()
             st.pyplot(plt)
             st.subheader("Insights")
-            st.write("Price variation is similar to Sales_Volume")
+            with st.expander("📊 Show "):
+                st.write("Price variation is similar to Sales_Volume")
 # ------------------------------------------------------------------------------------------------------------------
     elif page == "Correlation Relationship":
         # Create a 1x2 subplot layout
@@ -297,7 +314,8 @@ def dashboard():
         st.pyplot(plt)
 
         st.subheader("Insight")
-        st.write('''1. Positive relationship between Price and Engine size for obvious reasons.
+        with st.expander("📊 Show "):
+            st.write('''1. Positive relationship between Price and Engine size for obvious reasons.
                 \n2.   Reverse Relationship between Price and Sales Volume.''')
 # ------------------------------------------------------------------------------------------------------------------
     elif page == "Key Insights":

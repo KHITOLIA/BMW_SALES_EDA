@@ -85,7 +85,7 @@ def dashboard():
     if page == "Overview":
        
        st.title("Dataset Overview")
-       st.dataframe(data = df)
+       st.dataframe(df.head(3))
        st.subheader("Statistical Summary")
        st.write(df.describe())
        st.write("### Categorical Value Counts")

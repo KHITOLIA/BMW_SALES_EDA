@@ -375,7 +375,6 @@ def dashboard():
             st.write(f"**R² Score:** {r2:.3f}")
             st.write(f"**MAE:** {mae:.2f}")
             st.write(f"**RMSE:** {rmse:.2f}")
-        st.divider()
         with st.expander("📈Sales Prediction "):
              # USER INPUT SECTION
             # -------------------------------
@@ -411,5 +410,6 @@ def dashboard():
                 st.caption("Prediction based on trained linear regression model and preserved category encodings.")
 
 dashboard()
+
 
 

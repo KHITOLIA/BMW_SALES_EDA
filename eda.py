@@ -339,7 +339,7 @@ def dashboard():
         
         st.header("🚗 Predict Future BMW Sales Volume")
         st.write("Use the trained model to forecast future sales volume based on car features.")
-        st.dataframe(pd.read_csv('model.csv'))
+        st.dataframe(pd.read_csv('model.csv').drop(columns = ['Unnamed: 0'])
 
         df.drop(columns=['Mileage_KM', 'Price_USD'], inplace=True, errors='ignore')
 
@@ -409,4 +409,5 @@ def dashboard():
             prediction = model.predict(input_data)[0]
             st.success(f"💡 **Predicted Future Sales Volume:** {prediction:,.0f} units")
             st.caption("Prediction based on trained linear regression model and preserved category encodings.")
+
 dashboard()

@@ -4,8 +4,19 @@ import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
 import os
+import time
 import kagglehub
 import seaborn as sns
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import LabelEncoder, StandardScaler
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.metrics import r2_score, mean_absolute_error, mean_squared_error
+import pickle
+
+
+# le = LabelEncoder()
+# scaler = StandardScaler()
+# model = RandomForestRegressor(n_estimators=200, random_state=42)
 
 # ------------------------------------------------
 # Streamlit page setup
@@ -13,20 +24,9 @@ import seaborn as sns
 st.set_page_config(
     page_title="BMW Sales EDA",
     page_icon="🚗",
-    layout="wide"
+    initial_sidebar_state = "collapsed",
+    layout="centered"
 )
-
-import time
-
-def type_writer(text, speed=0.00009):
-    """Display text with typing animation."""
-    placeholder = st.empty()
-    typed_text = ""
-    for char in text:
-        typed_text += char
-        placeholder.markdown(f"<p style='color:white;font-size:16px;'>{typed_text}</p>", unsafe_allow_html=True)
-        time.sleep(speed)
-
 # ------------------------------------------------
 # Custom Background and Styling
 # ------------------------------------------------
@@ -78,14 +78,18 @@ for col in df.columns:
 
 
 def dashboard():
-    st.title("BMW SALES DATA ANALYSIS(EDA)")
+    global categorical_features, numerical_features
+    st.title("BMW SALES ANALYSIS(EDA) & PREDICTION...")
     st.sidebar.title("🚗 Exploratory Data Analysis ")
     page = st.sidebar.radio("📂", ["Overview", "Outlier Detection", "Pie-Chart","Univariate Analysis","Bivariate Analysis", 
-                                   "Trend Analysis","Correlation Relationship","Key Insights", "Conclusion"])
+                                   "Trend Analysis","Correlation Relationship","Key Insights", "Conclusion","Future Sales"])
     if page == "Overview":
        
-       st.title("Dataset Overview")
-       st.dataframe(df.head(3))
+       st.subheader("Dataset Overview")
+       st.write(df.head(3))
+       st.write("        ")
+       st.write(" ")
+       st.write(" ")
        st.subheader("Statistical Summary")
        st.write(df.describe())
        st.write("### Categorical Value Counts")
@@ -103,8 +107,7 @@ def dashboard():
         st.write(sorted(df[col].unique()))
         st.write("")
        st.subheader("Insights")
-       with st.expander("📊 Show "):
-          st.write(f'''1. Data contains 50000 rows and 11 columns
+       st.write(f'''1. Data contains 50000 rows and 11 columns
                     \n2. The dataset contains a mix of categorical and numerical features.
                     \n3. Numerical features include {numerical_features[0]}, {numerical_features[1]}, {numerical_features[2]}, {numerical_features[3]}. 
                     \n4. The dataset appears to be well-structured with no missing values in the displayed overview.
@@ -112,7 +115,6 @@ def dashboard():
                     \n6. According to this data bwm sold their cars from 2010-2024.
                     \n7. Their Engine size varies from 1.5L-5.0L.
                     \n8. Price range of cars is from 20,000 USD to 150,000 USD.''')
-       
 #-----------------------------------------------------------------------------------------------------------------------
     elif page == "Outlier Detection":
         st.title("Outlier Detection using Box Plots")
@@ -126,8 +128,7 @@ def dashboard():
             plt.show()
             st.pyplot(plt)
         st.subheader("Insights")
-        with st.expander("📊 Show "):
-            st.write('''1. No outliers are present in the numerical features as per the box plot analysis
+        st.write('''1. No outliers are present in the numerical features as per the box plot analysis
                     \n2. All the columns are in proper type
                     \n3. No need of outlier treatment as no outliers are present in the data
                     \n4. Data is clean and ready for further analysis or modeling
@@ -145,8 +146,7 @@ def dashboard():
             st.pyplot(plt)
         
         st.subheader("Insights")
-        with st.expander("📊 Show "):
-            st.write('''1. All categories in each categorical column are fairly represented in the dataset.
+        st.write('''1. All categories in each categorical column are fairly represented in the dataset.
                     \n2. The distribution of car models, regions, colors, fuel types, and transmissions appears balanced without extreme dominance by any single category.
                     \n3. This balance is beneficial for building robust machine learning models as it reduces bias towards any particular category.
                     ''')
@@ -169,8 +169,7 @@ def dashboard():
                 plt.show()
                 st.pyplot(plt)
             st.subheader("Insights")
-            with st.expander("📊 Show "):
-                st.write('''1. all categories in each categorical col are almost equally distributed.
+            st.write('''1. all categories in each categorical col are almost equally distributed.
                     \n2. Model: The dataset includes a variety of BMW models, with some models being more popular than others where 7 Series have the highest number of records.
                     \n3. Region: Sales are distributed across multiple regions, indicating a global presence.
                     \n4. Asians are the most recorded people out here.
@@ -189,9 +188,8 @@ def dashboard():
                 plt.show()
                 st.pyplot(plt)
             
-            st.subheader("Insights")
-            with st.expander("📊 Show "):
-                st.write('''1. data has been properly in the format no negative values are present here
+            st.write("Insights")
+            st.write('''1. data has been properly in the format no negative values are present here
                         \n2. All features have a uniform distribution.
                         \n3. from the above analysis we can say that no need of mileage col no relationship found.
                         \n4. hence we can drop the mileage column from the data for better analysis.
@@ -217,8 +215,7 @@ def dashboard():
             plt.show()
             st.pyplot(plt)
         st.subheader("Insights")
-        with st.expander("📊 Show "):
-            st.write('''1. BMW sold almost same amount of different Models whereas 7 Series generates the highest revenue for the company and M3 lowest.
+        st.write('''1. BMW sold almost same amount of different Models whereas 7 Series generates the highest revenue for the company and M3 lowest.
                 \n2. It clearly reflecting the behaviour of customers are showing interest not only to specific model but also to every model equally.
                 \n3. Mostly Asians are Beemer Lover 
                 \n4. BMW Sales is approximately same among rest of the regions
@@ -261,8 +258,7 @@ def dashboard():
             plt.show()
             st.pyplot(plt)
             st.subheader("Insights")
-            with st.expander("📊 Show "):
-                st.write('''1. Company is being almost consistent making profit from 2010 to 2017.
+            st.write('''1. Company is being almost consistent making profit from 2010 to 2017.
                         \n2. After 2018 it leads to showing some alternate fluctuations per year till 2024 by increasing lately.
                         \n3. Peak Sales goes in 2022 but slightly decrease in next two years.
                         \n4. Recently X6 Sales increased in few years whereas M3 decreased.
@@ -301,8 +297,7 @@ def dashboard():
             plt.show()
             st.pyplot(plt)
             st.subheader("Insights")
-            with st.expander("📊 Show "):
-                st.write("Price variation is similar to Sales_Volume")
+            st.write("Price variation is similar to Sales_Volume")
 # ------------------------------------------------------------------------------------------------------------------
     elif page == "Correlation Relationship":
         # Create a 1x2 subplot layout
@@ -314,8 +309,7 @@ def dashboard():
         st.pyplot(plt)
 
         st.subheader("Insight")
-        with st.expander("📊 Show "):
-            st.write('''1. Positive relationship between Price and Engine size for obvious reasons.
+        st.write('''1. Positive relationship between Price and Engine size for obvious reasons.
                 \n2.   Reverse Relationship between Price and Sales Volume.''')
 # ------------------------------------------------------------------------------------------------------------------
     elif page == "Key Insights":
@@ -340,5 +334,79 @@ def dashboard():
 \n4. Leverage Data-Driven Pricing — use elasticity insights to optimize price per region.
 \n5. Personalized Marketing — highlight popular colors and features by region.
 \n6. Predictive Sales Planning — integrate EDA results into regression models for forecasting.''')
+# ------------------------------------------------------------------------------------------------------------------
+    elif page == "Future Sales":
+        
+        st.header("🚗 Predict Future BMW Sales Volume")
+        st.write("Use the trained model to forecast future sales volume based on car features.")
+        st.dataframe(pd.read_csv('model.csv'))
 
+        df.drop(columns=['Mileage_KM', 'Price_USD'], inplace=True, errors='ignore')
+
+        # categorical columns
+        categorical_features = [col for col in df.columns if df[col].dtype == 'object']
+
+        # Encode categorical columns and store encoders
+        encoders = {}
+        for col in categorical_features:
+            le = LabelEncoder()
+            df[col] = le.fit_transform(df[col])
+            encoders[col] = le  # store encoder for future use
+
+    
+        X = df.drop(columns=['Sales_Volume'])
+        y = df['Sales_Volume']
+
+        _, X_test, _, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+        file_path = 'Linear_regression'
+        with open(file_path + '.pkl', 'rb') as file:
+            model = pickle.load(file)
+
+        # -------------------------------
+        # Model Evaluation
+        # -------------------------------
+        y_pred = model.predict(X_test)
+        r2 = r2_score(y_test, y_pred)
+        mae = mean_absolute_error(y_test, y_pred)
+        rmse = np.sqrt(mean_squared_error(y_test, y_pred))
+
+        with st.expander("📈 Model Performance Metrics"):
+            st.write(file_path.upper() + ' MODEL PERFORMANCE')
+            st.write(f"**R² Score:** {r2:.3f}")
+            st.write(f"**MAE:** {mae:.2f}")
+            st.write(f"**RMSE:** {rmse:.2f}")
+        st.divider()
+
+        # USER INPUT SECTION
+        # -------------------------------
+        st.subheader("🔮 Enter Future Car Specifications to Predict Sales Volume")
+        model_input = st.selectbox("Select Model", encoders['Model'].classes_)
+        year_input = st.number_input("Year", min_value=2000, max_value=2030, step=1)
+        region_input = st.selectbox("Select Region", encoders['Region'].classes_)
+        color_input = st.selectbox("Select Color", encoders['Color'].classes_)
+        fuel_input = st.selectbox("Fuel Type", encoders['Fuel_Type'].classes_)
+        trans_input = st.selectbox("Transmission", encoders['Transmission'].classes_)
+        engine_input = st.number_input("Engine Size (L)", min_value=1.0, max_value=6.0, step=0.1)
+        sales_class_input = st.selectbox("Sales Classification", encoders['Sales_Classification'].classes_)
+        if st.button("Predict Sales Volume"):
+            # Create DataFrame for prediction
+            input_data = pd.DataFrame({
+                'Model': [model_input],
+                'Year': [year_input],
+                'Region': [region_input],
+                'Color': [color_input],
+                'Fuel_Type': [fuel_input],
+                'Transmission': [trans_input],
+                'Engine_Size_L': [engine_input],
+                'Sales_Classification': [sales_class_input]})
+            # Encode categorical inputs using stored encoders (no re-fit!)
+            for col in input_data.columns:
+                if col in encoders:
+                    input_data[col] = encoders[col].transform(input_data[col])
+            # Align columns with training data
+            input_data = input_data[X.columns]
+            # Predict
+            prediction = model.predict(input_data)[0]
+            st.success(f"💡 **Predicted Future Sales Volume:** {prediction:,.0f} units")
+            st.caption("Prediction based on trained linear regression model and preserved category encodings.")
 dashboard()

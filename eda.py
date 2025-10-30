@@ -376,39 +376,40 @@ def dashboard():
             st.write(f"**MAE:** {mae:.2f}")
             st.write(f"**RMSE:** {rmse:.2f}")
         st.divider()
-
-        # USER INPUT SECTION
-        # -------------------------------
-        st.subheader("🔮 Enter Future Car Specifications to Predict Sales Volume")
-        model_input = st.selectbox("Select Model", encoders['Model'].classes_)
-        year_input = st.number_input("Year", min_value=2000, max_value=2030, step=1)
-        region_input = st.selectbox("Select Region", encoders['Region'].classes_)
-        color_input = st.selectbox("Select Color", encoders['Color'].classes_)
-        fuel_input = st.selectbox("Fuel Type", encoders['Fuel_Type'].classes_)
-        trans_input = st.selectbox("Transmission", encoders['Transmission'].classes_)
-        engine_input = st.number_input("Engine Size (L)", min_value=1.0, max_value=6.0, step=0.1)
-        sales_class_input = st.selectbox("Sales Classification", encoders['Sales_Classification'].classes_)
-        if st.button("Predict Sales Volume"):
-            # Create DataFrame for prediction
-            input_data = pd.DataFrame({
-                'Model': [model_input],
-                'Year': [year_input],
-                'Region': [region_input],
-                'Color': [color_input],
-                'Fuel_Type': [fuel_input],
-                'Transmission': [trans_input],
-                'Engine_Size_L': [engine_input],
-                'Sales_Classification': [sales_class_input]})
-            # Encode categorical inputs using stored encoders (no re-fit!)
-            for col in input_data.columns:
-                if col in encoders:
-                    input_data[col] = encoders[col].transform(input_data[col])
-            # Align columns with training data
-            input_data = input_data[X.columns]
-            # Predict
-            prediction = model.predict(input_data)[0]
-            st.success(f"💡 **Predicted Future Sales Volume:** {prediction:,.0f} units")
-            st.caption("Prediction based on trained linear regression model and preserved category encodings.")
+        with st.expander("📈Sales Prediction "):
+             # USER INPUT SECTION
+            # -------------------------------
+            st.subheader("🔮 Enter Future Car Specifications to Predict Sales Volume")
+            model_input = st.selectbox("Select Model", encoders['Model'].classes_)
+            year_input = st.number_input("Year", min_value=2000, max_value=2030, step=1)
+            region_input = st.selectbox("Select Region", encoders['Region'].classes_)
+            color_input = st.selectbox("Select Color", encoders['Color'].classes_)
+            fuel_input = st.selectbox("Fuel Type", encoders['Fuel_Type'].classes_)
+            trans_input = st.selectbox("Transmission", encoders['Transmission'].classes_)
+            engine_input = st.number_input("Engine Size (L)", min_value=1.0, max_value=6.0, step=0.1)
+            sales_class_input = st.selectbox("Sales Classification", encoders['Sales_Classification'].classes_)
+            if st.button("Predict Sales Volume"):
+                # Create DataFrame for prediction
+                input_data = pd.DataFrame({
+                    'Model': [model_input],
+                    'Year': [year_input],
+                    'Region': [region_input],
+                    'Color': [color_input],
+                    'Fuel_Type': [fuel_input],
+                    'Transmission': [trans_input],
+                    'Engine_Size_L': [engine_input],
+                    'Sales_Classification': [sales_class_input]})
+                # Encode categorical inputs using stored encoders (no re-fit!)
+                for col in input_data.columns:
+                    if col in encoders:
+                        input_data[col] = encoders[col].transform(input_data[col])
+                # Align columns with training data
+                input_data = input_data[X.columns]
+                # Predict
+                prediction = model.predict(input_data)[0]
+                st.success(f"💡 **Predicted Future Sales Volume:** {prediction:,.0f} units")
+                st.caption("Prediction based on trained linear regression model and preserved category encodings.")
 
 dashboard()
+
 

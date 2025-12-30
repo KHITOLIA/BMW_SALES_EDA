@@ -87,7 +87,7 @@ div.block-container {
 st.markdown(page_bg_img, unsafe_allow_html=True)
 # Download latest version
 path = kagglehub.dataset_download("y0ussefkandil/bmw-sales2010-2024")
-df = pd.read_csv(path + "/BMW sales data (2010-2024) (1).csv")
+df = pd.read_csv(path + "/BMW sales data (2010-2024).csv")
 df.drop(columns=['Mileage_KM'], inplace=True)
 
 categorical_features = []
